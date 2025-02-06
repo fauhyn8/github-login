@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Edit, Package2, Home, Users, ShoppingBag, BarChart2, Settings, ChevronRight, Plus, Minus, Printer } from 'lucide-react';
+import { Search, Plus, Minus, ChevronRight } from 'lucide-react';
 import axios from 'axios';
 import type { Product, CartItem, ApiResponse } from '../types';
 
@@ -78,19 +78,26 @@ function RequisitionPage({ userId, username }: RequisitionPageProps) {
     try {
       // Process each item in the cart
       for (const item of cartItems) {
+        const total = item.orderQuantity * item.price; // Calculate total for each item
+
         await axios.put(`https://server-weht.onrender.com/products/${item._id}/stock/withdraw`, {
-          userId: userId,
-          username: username,
-          quantity: item.orderQuantity,
-          description: notes || 'Stock withdrawal'
+          productId: item._id,               // The product being withdrawn
+          userId: userId,                    // User ID performing the withdrawal
+          username: username,                // Username of the person withdrawing
+          type: 'withdraw',                  // Type of operation
+          quantity: item.orderQuantity,      // Quantity withdrawn
+          total,                             // Total = quantity * price
+          description: notes || 'Stock withdrawal', // Optional description (can be the notes)
+          location,                          // The location of the withdrawal
+          billId: requisitionNumber          // The requisition number (ใบเบิก)
         });
       }
-      
+
       alert('บันทึกการเบิกสินค้าเรียบร้อยแล้ว');
       setIsDialogOpen(false);
       setCartItems([]);
       setNotes('');
-      await fetchProducts();
+      await fetchProducts();  // Fetch the updated product data
     } catch (error: any) {
       console.error('Error processing withdrawal:', error);
       if (error.response?.data?.message === "Insufficient stock") {
