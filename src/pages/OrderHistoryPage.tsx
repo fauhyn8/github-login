@@ -13,7 +13,7 @@ function OrderHistoryPage() {
     const fetchStockHistory = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('https://server-weht.onrender.com/stock-history');
+        const response = await axios.get('https://server-weht.onrender.com/stock-history/withdraw');
         setStockHistory(response.data);
       } catch (error) {
         console.error('Error fetching stock history:', error);
