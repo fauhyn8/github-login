@@ -6,7 +6,7 @@ interface LoginPageProps {
   onLogin: (user: { username: string; role: string; _id: string }) => void;
 }
 
-function LoginPage({ onLogin }: LoginPageProps) {
+const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -24,11 +24,16 @@ function LoginPage({ onLogin }: LoginPageProps) {
       });
 
       if (response.data.success) {
+        const user = response.data.user;
+        // 🔹 บันทึกข้อมูลผู้ใช้ลงใน localStorage
+        localStorage.setItem('user', JSON.stringify(user));
+
         onLogin({
-          username: response.data.user.username,
-          role: response.data.user.role,
-          _id: response.data.user._id
+          username: user.username,
+          role: user.role,
+          _id: user._id
         });
+
       } else {
         setError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
       }
@@ -99,6 +104,6 @@ function LoginPage({ onLogin }: LoginPageProps) {
       </div>
     </div>
   );
-}
+};
 
 export default LoginPage;
