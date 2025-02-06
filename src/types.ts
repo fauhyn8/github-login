@@ -23,11 +23,13 @@ export interface OrderHistory {
 
 export interface StockHistory {
   _id: string;
-  productId: string;
-  type: 'IN' | 'OUT';
-  quantity: number;
   date: string;
+  documentNo: string;
+  location: string;
+  personId: string;
+  personName: string;
   notes: string;
+  total: number;
 }
 
 export interface User {
