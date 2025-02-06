@@ -5,10 +5,9 @@ import type { Product } from '../types';
 
 interface AddProductPageProps {
   userId: string | undefined;
-  username: string;
 }
 
-function AddProductPage({ userId, username }: AddProductPageProps) {
+function AddProductPage({ userId }: AddProductPageProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [productName, setProductName] = useState('');
   const [description, setDescription] = useState('');
@@ -46,8 +45,7 @@ function AddProductPage({ userId, username }: AddProductPageProps) {
         const response = await axios.put(`https://server-weht.onrender.com/products/${selectedProduct._id}/stock/add`, {
           quantity: Number(addQuantity),
           description: stockNote || '',
-          userId: userId,
-          username: username
+          userId,
         });
         
         if (response.data) {
@@ -67,8 +65,6 @@ function AddProductPage({ userId, username }: AddProductPageProps) {
           description: description || '',
           price: Number(price),
           initialStock: Number(quantity),
-          userId: userId,
-          username: username
         });
         
         if (response.data) {
